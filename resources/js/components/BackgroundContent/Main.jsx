@@ -19,30 +19,44 @@ const BackgroundContent = () => {
       } );
       
       // console.log( "nav element in main: ", navElements );
+      let prevDate = new Date();
       function animate() {
-          if( background.currentState !== 'static') {
-              background.update( 0.1 );
+          const now = new Date();
+          if( background.currentState !== 'static' && prevDate.getTime() + 40 >= now.getTime() ) {
+              background.update();
               background.moveOut();
               background.draw();
-              requestAnimationFrame(animate);
           }
+          //console.log(navElements.length);
+          prevDate = now;
+          requestAnimationFrame(animate);
       }
       
-      function startAnimation() {
-        animate();
-        setTimeout(startAnimation, 1000 / 40); // 1000 ms / 30 fps = 33.33 ms per frame
-        //console.log(document.getElementsByTagName('*').length);
-      }
+      // function startAnimation() {
+      //   animate();
+      //   setTimeout(startAnimation, 1000 / 10); // 1000 ms / 30 fps = 33.33 ms per frame
+      //   //console.log(document.getElementsByTagName('*').length);
+      // }
       
-      startAnimation();
+      animate();
 
-      window.addEventListener( 'resize', function () {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight; 
-        context.clearRect(0, 0, canvas.width, canvas.height );
-        background.setDefault( context, canvas );
-        background.draw();
-      } );
+      let resizeTimeout;
+
+      window.addEventListener('resize', function () {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+
+          // Jeżeli istnieje poprzedni timeout, kasujemy go
+          clearTimeout(resizeTimeout);
+
+          // Ustawiamy nowy timeout na 250ms (lub dowolną wartość)
+          resizeTimeout = setTimeout(function () {
+              context.clearRect(0, 0, canvas.width, canvas.height);
+              background.setDefault(context, canvas);
+              background.draw();
+          }, 250); // opóźnienie 250ms - można dostosować w zależności od potrzeb
+      })
+
     }, []);
   return (
     <div className="App">

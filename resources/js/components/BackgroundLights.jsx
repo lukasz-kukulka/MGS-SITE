@@ -10,7 +10,7 @@ const BackgroundLights = () => {
 
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-
+    
     let particlesArray = [];
     let prevTextIndex = -1;
     let lastFrameTime = 0;
@@ -23,7 +23,8 @@ const BackgroundLights = () => {
             this.posY = y;
             this.animationSpeed = 2;
             this.transparentText = 0.00;
-            this.fontSize = 48;
+
+            this.fontSize = window.innerWidth / 40;
             this.font = `${ this.fontSize }px Roboto Mono`;
             this.indexPosition = index;
             this.textStatus = "off"; // or in, or out, or done
@@ -180,7 +181,8 @@ const BackgroundLights = () => {
         constructor( x, y, dirX, dirY, size, color, text ) {
             this.x = x;
             this.y = y;
-            this.textPosX = ( Math.random() * ( canvas.width - 50 ) ) - 200;
+            this.textPosX = ( Math.random() * ( canvas.width - 50 ) ) - canvas.width / 10;
+            console.log( this.textPosX );
             this.dirX = dirX;
             this.dirY = dirY;
             this.size = size;

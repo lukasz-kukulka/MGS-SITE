@@ -40,20 +40,30 @@ export class CanvasTileContent {
     setShineData() {
         // this.textIndex = 0;
         this.shineValue = 0.00;
-        this.baseShine = 0.0007;
+        this.baseShine = 0.1;
         this.shineSpeed = this.baseShine;
-        this.expandValue = 0.02
+        this.expandValue = 3
         this.shineStatus = 'in' // out, done
     }
 
-    setExpandSettings( limitX, limitY ) {
+    setMovePosition( limitX, limitY ) {
         this.expandStatus = "begin"; // onPlace, 
         this.startX = limitX;
         this.startY = limitY;
-        this.expandSpeed = 3000;
+        this.expandSpeed = 30;
         this.moveToCornerSpeedX = ( this.x - limitX ) / this.expandSpeed;
         this.moveToCornerSpeedY = ( this.y - limitY ) / this.expandSpeed;
 
+    }
+
+    setResize( x, y ) {
+        const resizeSpeed = 10;
+        this.expandStatus = "begin"; // onPlace, 
+        this.expandSizeX = x;
+        this.expandSizeY = y;
+        this.resizeSpeedX = ( this.width - this.expandSizeX ) / resizeSpeed;
+        this.resizeSpeedY = ( this.height - this.expandSizeY ) / resizeSpeed;
+        //debugger
     }
 
     // SZABLON DO POZYCJI OBRAZOW PRZY GENEROWANIOU TEXTU 
@@ -310,15 +320,17 @@ export class CanvasTileContent {
         //console.log( this.shineValue, this.shineStatus );
     }
 
-    expandBegin() {
+    expand() {
         const speedX = Math.abs( this.moveToCornerSpeedX );
         const speedY = Math.abs( this.moveToCornerSpeedY );
-        if( this.startX >= this.x - this.moveToCornerSpeedX && this.startX <= this.x + this.moveToCornerSpeedX ) {
+        const reducer = Math.max( speedX, speedY );
+
+        if( this.startX >= this.x - reducer && this.startX <= this.x + reducer ) {
             this.x = this.startX;
             //debugger
         }
 
-        if( this.startY >= this.y - this.moveToCornerSpeedY && this.startY <= this.y + this.moveToCornerSpeedY ) {
+        if( this.startY >= this.y - reducer && this.startY <= this.y + reducer ) {
             this.y = this.startY;
             //debugger
         }
@@ -342,10 +354,55 @@ export class CanvasTileContent {
         if( this.startX === this.x && this.startY === this.y ) {
             this.expandStatus = 'onPlace';
         }
-        // if( this.y < 0 ) {
-        //     debugger
+        // console.log( speedX, speedY )
+        console.log( 'Y = ', this.startX, '===', this.x, this.startY, '===', this.y );
+
+        // if ( this.startX === this.x ) {
+        //     console.log( 'X = ', this.startX, '===', this.x, this.startY, '===', this.y );
         // }
-        //debugger
+
+        // if ( this.startY === this.y ) {
+        //     console.log( 'Y = ', this.startX, '===', this.x, this.startY, '===', this.y );
+        // }
+    }
+
+    resize() {
+        const speedX = Math.abs( this.resizeSpeedX );
+        const speedY = Math.abs( this.resizeSpeedY );
+        // const reducer = 1.0;
+
+        // if( this.startX >= this.x - reducer && this.startX <= this.x + reducer ) {
+        //     this.x = this.startX;
+        //     //debugger
+        // }
+
+        // if( this.startY >= this.y - reducer && this.startY <= this.y + reducer ) {
+        //     this.y = this.startY;
+        //     //debugger
+        // }
+
+        if( this.expandSizeX >= this.width ) {
+            this.width += speedX;
+        }
+
+        // if( this.startX > this.x ) {
+        //     this.x += speedX;
+        // }
+
+        if( this.expandSizeY >= this.height ) {
+            this.height += speedY;
+        }
+        //console.log( speedX, speedY,  )
+        // if( this.startY > this.y ) {
+        //     this.y += speedY;
+        // }
+
+        if( this.expandSizeX <= this.width && this.expandSizeY <= this.height ) {
+            //debugger
+            this.height = speedY;
+            this.width = speedX;
+            this.expandStatus = 'onPlace';
+        }
     }
 
     moveOut() {

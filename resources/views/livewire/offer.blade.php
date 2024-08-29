@@ -8,3 +8,6 @@
         </div>
     </div>
 </div>
+    wire@auth
+        
+    @endauth

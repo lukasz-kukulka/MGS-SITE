@@ -44,9 +44,19 @@ export default class CanvasMainContent {
             this.newContentIn('offer-nav');
         });
         this.drawHomePage();
-        this.currentState = "static"; // static, out, in, shine, expandBegin, backgroundOut, expandEnd
+        this.currentState = "static"; // static, out, in, shine, expandBegin, expandBackground, expandEnd
         this.contentTilesArray = [];
-        //this.contentObjectsArray.push( this.createSingleTileContent(  'home-page', '/images/home_page.webp' ) );
+        this.tileDimSmall = this.canvas.width < this.canvas.height ? this.canvas.width : this.canvas.height;
+        this.tileDimHigh = this.canvas.width > this.canvas.height ? this.canvas.width : this.canvas.height;
+        
+        if ( this.canvas.width < this.canvas.height ) {
+            this.tileSize = this.tileDimSmall / 7;
+        } else {
+            this.tileSize = ( this.tileDimSmall / 7 + this.tileDimHigh / 6 ) / 2 ;
+        }
+
+        this.spaceBetweenTiles = this.tileSize / 8;
+        //debugger
     } 
     
     setShineAnimationParam() {
@@ -65,14 +75,13 @@ export default class CanvasMainContent {
             //console.log( tilesShineArrayIndex );
             this.tilesShineArrayIndex.push( random );
         }
-        
+        this.backgroundTile = this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ];
     }
 
     generateMultiContentTiles() {
         const text = document.querySelector( '#background-small-tile-text' ).innerHTML;
-        const tileDim = this.canvas.width < this.canvas.height ? this.canvas.width : this.canvas.height;
-        const tileSize = tileDim / 5;
-        const spaceBetweenTiles = tileSize / 10;
+        const tileSize = this.tileSize;
+        const spaceBetweenTiles = this.spaceBetweenTiles;
         const midTilePos = this.canvas.width / 2 - tileSize / 2;
         let leftTilePos = midTilePos - tileSize - spaceBetweenTiles;
         let rightTilePos = midTilePos + tileSize + spaceBetweenTiles;
@@ -99,8 +108,9 @@ export default class CanvasMainContent {
             leftTilePos = midTilePos - tileSize - spaceBetweenTiles;
             rightTilePos = midTilePos + tileSize + spaceBetweenTiles;
         }
-        
-
+        this.lastTilePosX = this.canvas.width + this.contentTilesArray.at( -1 ).x;
+        //this.lastTilePosX = this.canvas.width - ( this.contentTilesArray.at( -1 ).x + tileSize + spaceBetweenTiles );
+        //debugger
         // this.contentTilesArray.forEach( ( tile ) => {
         //     // tile.addImage( '/images/about_us.webp' );
         //     tile.setTextArray( text, 0.15 );
@@ -234,7 +244,7 @@ export default class CanvasMainContent {
         this.contentTilesArray.forEach( ( tile ) => {
             tile.draw();
             //debugger
-            if( this.currentState === "in" && tile.moveIn( 1 ) === false ) {
+            if( this.currentState === "in" && tile.moveIn( 50 ) === false ) {
                 this.currentState = "shine";
                 this.setShineAnimationParam();
             }
@@ -267,8 +277,8 @@ export default class CanvasMainContent {
         } 
         if ( this.tilesShineArrayIndex.length < this.shineTilesIndex + 1 ) { 
             //debugger
-            this.currentState = "expand";
-            this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ].setExpandSettings( this.backgroundTilesStartX, this.backgroundTilesStartY );
+            this.currentState = "expandBegin";
+            this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ].setMovePosition( this.backgroundTilesStartX, this.backgroundTilesStartY );
         }
     }
 
@@ -277,10 +287,21 @@ export default class CanvasMainContent {
     }
 
     animateExpandBegin() {
-        const animateTile = this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ];
-        animateTile.expandBegin();
-        if ( animateTile.expandStatus === 'onPlace' ) {
-            this.currentState = 'backgroundOut';
+        // const animateTile = this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ];
+        this.backgroundTile.expand();
+        if ( this.backgroundTile.expandStatus === 'onPlace' ) {
+            this.currentState = 'expandBackground';
+            this.backgroundTile.setResize( this.lastTilePosX, this.contentHeight );
+            //debugger
+        }
+    }
+
+    animateBackgroundExpand() {
+        //debugger;
+        this.backgroundTile.resize();
+        if ( this.backgroundTile.expandStatus === 'onPlace' ) {
+            this.currentState = 'expandEnd';
+            //debugger;
         }
     }
 
@@ -296,7 +317,6 @@ export default class CanvasMainContent {
                 this.drawCurrentPage();
                 break;
             case 'in':
-                //console.log( "this.currentState", this.currentState )
                 this.clearCanvas();
                 this.drawBackgroundTiles();
                 break;
@@ -305,12 +325,18 @@ export default class CanvasMainContent {
                 this.drawBackgroundTiles();
                 this.animateShine();
                 break;
-            case 'expand':
+            case 'expandBegin':
                 this.clearCanvas();
                 this.drawBackgroundTiles();
                 this.animateExpandBegin();
                 break;
+            case 'expandBackground':
+                this.clearCanvas();
+                this.drawBackgroundTiles();
+                this.animateBackgroundExpand();
+                break;
             default:
+                //debugger
                 break;
         }
         //this.drawCurrentPage();
