@@ -4,6 +4,9 @@ import CanvasMainContent from './CanvasMainContent';
 const BackgroundContent = () => {
     const navElements = document.querySelectorAll('.nav-menu-link');
     const canvasRef = useRef(null);
+    let isInDocument = true;
+    let resized = false;
+    let animationId;
 
     useEffect(() => {
       const canvas = canvasRef.current;
@@ -29,7 +32,7 @@ const BackgroundContent = () => {
           }
           //console.log(navElements.length);
           prevDate = now;
-          requestAnimationFrame(animate);
+          animationId = requestAnimationFrame(animate);
       }
       
       // function startAnimation() {
@@ -38,24 +41,39 @@ const BackgroundContent = () => {
       //   //console.log(document.getElementsByTagName('*').length);
       // }
       
-      animate();
+      animationId = requestAnimationFrame(animate);
 
-      let resizeTimeout;
+      document.addEventListener('mouseleave', function() {
+        isInDocument = false;
+        console.log('Kursor opuścił okno');
+        
+      });
+
+      document.addEventListener('mouseover', function() {
+        isInDocument = true;
+        if( resized === true ) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          background.setDefault(context, canvas);
+          // background.draw();
+          animationId = requestAnimationFrame(animate);
+          resized = false;
+        }
+        console.log('Kursor pojawil sie w oknie');
+      });
+
+
 
       window.addEventListener('resize', function () {
+          cancelAnimationFrame(animationId);
           canvas.width = window.innerWidth;
           canvas.height = window.innerHeight;
-
-          // Jeżeli istnieje poprzedni timeout, kasujemy go
-          clearTimeout(resizeTimeout);
-
-          // Ustawiamy nowy timeout na 250ms (lub dowolną wartość)
-          resizeTimeout = setTimeout(function () {
-              context.clearRect(0, 0, canvas.width, canvas.height);
-              background.setDefault(context, canvas);
-              background.draw();
-          }, 250); // opóźnienie 250ms - można dostosować w zależności od potrzeb
-      })
+          if ( isInDocument === false ) {
+            resized = true;
+          } else {
+            resized = false;
+          }
+          
+      } );
 
     }, []);
   return (

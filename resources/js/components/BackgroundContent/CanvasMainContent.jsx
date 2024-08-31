@@ -88,7 +88,7 @@ export default class CanvasMainContent {
         let posY = this.contentY;
         this.backgroundTilesStartY = posY;
         //constructor( context, canvas, x, y, width, height, radius, animationBorderEnd = 0, animationBorderStart = 0, blur = 0 )
-        // debugger;
+        //debugger;
         let blur = 3;
         
         while( posY + spaceBetweenTiles + tileSize < this.canvas.height ) {
@@ -119,11 +119,14 @@ export default class CanvasMainContent {
     }
 
     newContentIn( contentId ) {
+        if ( this.contentTilesArray.length > 0 ) {
+            return;
+        }
         this.generateMultiContentTiles();
         this.currentState = "out";
         this.nextPage = contentId.replace( "-nav", "" );
         this.contentSpeedOut = 50;
-        console.log( this.nextPage );
+        console.log( "CanvasMainContent->newContentIn : ", contentId, "next page: ", this.nextPage, "tiles: ", this.contentTilesArray );
     }
 
     createAllTilesContent() {
