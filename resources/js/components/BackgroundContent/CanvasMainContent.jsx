@@ -82,7 +82,7 @@ export default class CanvasMainContent {
         const text = document.querySelector( '#background-small-tile-text' ).innerHTML;
         const tileSize = this.tileSize;
         const spaceBetweenTiles = this.spaceBetweenTiles;
-        const midTilePos = this.canvas.width / 2 - tileSize / 2;
+        const midTilePos = ( this.canvas.width / 2 ) - ( tileSize / 2 );
         let leftTilePos = midTilePos - tileSize - spaceBetweenTiles;
         let rightTilePos = midTilePos + tileSize + spaceBetweenTiles;
         let posY = this.contentY;
@@ -90,32 +90,29 @@ export default class CanvasMainContent {
         //constructor( context, canvas, x, y, width, height, radius, animationBorderEnd = 0, animationBorderStart = 0, blur = 0 )
         //debugger;
         let blur = 3;
-        
+        let colNum = 0;
         while( posY + spaceBetweenTiles + tileSize < this.canvas.height ) {
             this.contentTilesArray.push( new CanvasTileContent( this.context, this.canvas, midTilePos, posY, tileSize, tileSize, spaceBetweenTiles, 0, 0, blur ) );
+            colNum++;
             this.contentTilesArray[ this.contentTilesArray.length - 1 ].setAnimationPositions( midTilePos - this.canvas.width, midTilePos );
             while( leftTilePos >= tileSize && rightTilePos <= this.canvas.width - tileSize && rightTilePos ) {
                 this.contentTilesArray.push( new CanvasTileContent( this.context, this.canvas, leftTilePos, posY, tileSize, tileSize, spaceBetweenTiles, 0, 0, blur ) );
                 this.contentTilesArray[ this.contentTilesArray.length - 1 ].setAnimationPositions( leftTilePos - this.canvas.width, leftTilePos );
                 this.contentTilesArray.push( new CanvasTileContent( this.context, this.canvas, rightTilePos, posY, tileSize, tileSize, spaceBetweenTiles, 0, 0, blur ) );
                 this.contentTilesArray[ this.contentTilesArray.length - 1 ].setAnimationPositions( rightTilePos - this.canvas.width, rightTilePos );
-
                 leftTilePos -= tileSize + spaceBetweenTiles;
                 rightTilePos += tileSize + spaceBetweenTiles;
                 this.backgroundTilesStartX = leftTilePos + tileSize + spaceBetweenTiles;
             }
+
             posY += spaceBetweenTiles + tileSize;
             leftTilePos = midTilePos - tileSize - spaceBetweenTiles;
             rightTilePos = midTilePos + tileSize + spaceBetweenTiles;
         }
-        this.lastTilePosX = this.canvas.width + this.contentTilesArray.at( -1 ).x;
-        //this.lastTilePosX = this.canvas.width - ( this.contentTilesArray.at( -1 ).x + tileSize + spaceBetweenTiles );
-        //debugger
-        // this.contentTilesArray.forEach( ( tile ) => {
-        //     // tile.addImage( '/images/about_us.webp' );
-        //     tile.setTextArray( text, 0.15 );
-        // } );
-        
+        this.rowNum = this.contentTilesArray.length / colNum;
+        this.colNum = colNum;
+        //this.tileHelper = this.contentTilesArray.push( new CanvasTileContent( this.context, this.canvas, this.startDrawX, this.startDrawY, this.canvas.width, this.canvas.height, 0 ) );
+        //tile.colorUpdate( "rgba( 0, 0, 111, 0.5 )", "rgba( 255, 255, 255, 0.5 )" );
     }
 
     newContentIn( contentId ) {
@@ -126,7 +123,7 @@ export default class CanvasMainContent {
         this.currentState = "out";
         this.nextPage = contentId.replace( "-nav", "" );
         this.contentSpeedOut = 50;
-        console.log( "CanvasMainContent->newContentIn : ", contentId, "next page: ", this.nextPage, "tiles: ", this.contentTilesArray );
+        //console.log( "CanvasMainContent->newContentIn : ", contentId, "next page: ", this.nextPage, "tiles: ", this.contentTilesArray );
     }
 
     createAllTilesContent() {
@@ -249,6 +246,7 @@ export default class CanvasMainContent {
             //debugger
             if( this.currentState === "in" && tile.moveIn( 50 ) === false ) {
                 this.currentState = "shine";
+                //debugger
                 this.setShineAnimationParam();
             }
         } );
@@ -294,7 +292,8 @@ export default class CanvasMainContent {
         this.backgroundTile.expand();
         if ( this.backgroundTile.expandStatus === 'onPlace' ) {
             this.currentState = 'expandBackground';
-            this.backgroundTile.setResize( this.lastTilePosX, this.contentHeight );
+            this.backgroundTile.setResize( this.tileSize * this.rowNum + this.spaceBetweenTiles * ( this.rowNum - 1 ), 
+                                           this.tileSize * this.colNum + this.spaceBetweenTiles * ( this.colNum - 1 ) );
             //debugger
         }
     }
@@ -339,7 +338,8 @@ export default class CanvasMainContent {
                 this.animateBackgroundExpand();
                 break;
             default:
-                //debugger
+                this.clearCanvas();
+                this.drawBackgroundTiles();
                 break;
         }
         //this.drawCurrentPage();

@@ -274,6 +274,9 @@ export class CanvasTileContent {
     moveIn( speed ) {
         if ( this.endPos > this.x ) {
             this.x += speed;
+            if( this.endPos < this.x ) {
+                this.x = this.endPos;
+            }
             return true;
         } else {
             return false;
@@ -355,7 +358,7 @@ export class CanvasTileContent {
             this.expandStatus = 'onPlace';
         }
         // console.log( speedX, speedY )
-        console.log( 'Y = ', this.startX, '===', this.x, this.startY, '===', this.y );
+        //console.log( 'Y = ', this.startX, '===', this.x, this.startY, '===', this.y );
 
         // if ( this.startX === this.x ) {
         //     console.log( 'X = ', this.startX, '===', this.x, this.startY, '===', this.y );
@@ -381,27 +384,37 @@ export class CanvasTileContent {
         //     //debugger
         // }
 
-        if( this.expandSizeX >= this.width ) {
+        if( this.expandSizeX > this.width ) {
             this.width += speedX;
+        }
+
+        if( this.expandSizeX < this.width ) {
+            this.width = this.expandSizeX;
         }
 
         // if( this.startX > this.x ) {
         //     this.x += speedX;
         // }
 
-        if( this.expandSizeY >= this.height ) {
+        if( this.expandSizeY > this.height ) {
             this.height += speedY;
+        }
+
+        if( this.expandSizeY < this.height ) {
+            this.height = this.expandSizeY;
         }
         //console.log( speedX, speedY,  )
         // if( this.startY > this.y ) {
         //     this.y += speedY;
         // }
 
-        if( this.expandSizeX <= this.width && this.expandSizeY <= this.height ) {
+        if( this.expandSizeX === this.width && this.expandSizeY === this.height ) {
             //debugger
-            this.height = speedY;
-            this.width = speedX;
+            // this.width = this.expandSizeX;
+            // this.height = speedY;
+            // this.width = speedX;
             this.expandStatus = 'onPlace';
+            //debugger
         }
     }
 
