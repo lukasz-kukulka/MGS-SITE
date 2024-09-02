@@ -76,6 +76,22 @@ export default class CanvasMainContent {
             this.tilesShineArrayIndex.push( random );
         }
         this.backgroundTile = this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ];
+        this.backgroundTileExtracted = null;
+    }
+
+    extractBackgroundContentTile() {
+        this.backgroundTileExtracted = new CanvasTileContent( 
+            this.context, 
+            this.canvas, 
+            this.backgroundTile.x, 
+            this.backgroundTile.y, 
+            this.tileSize * this.rowNum + this.spaceBetweenTiles * ( this.rowNum - 1 ), 
+            this.tileSize * this.colNum + this.spaceBetweenTiles * ( this.colNum - 1 ), 
+            this.backgroundTile.borderRadius, 
+            this.backgroundTile.animationBorderEnd, 
+            this.backgroundTile.animationBorderStart, 
+            this.backgroundTile.blur
+        );
     }
 
     generateMultiContentTiles() {
@@ -254,17 +270,25 @@ export default class CanvasMainContent {
         
     }
 
+    drawBackgroundExtractedTile() {
+        this.backgroundTileExtracted.draw();
+    }
+
+    replaceBackgroundTile() {
+        if( this.contentTilesArray.length === this.rowNum * this.colNum &&
+            this.backgroundTile.width === this.backgroundTileExtracted.width &&
+            this.backgroundTile.height === this.backgroundTileExtracted.height ) {
+                this.contentTilesArray.splice( this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ], 1 );
+            }
+    }
+
     animateShine() {
         while ( this.prevTileNumber === this.currentShinningTile ) {
             this.currentShinningTile = Math.floor( Math.random() * this.shineTilesNumber );
         }  
-        // if( this.shineTilesIndex === 9 )  { 
-        //     debugger
-        // }
         let isLastTile = false;
         if ( this.shineTilesIndex === this.tilesShineArrayIndex.length - 1 ) {
             isLastTile = true;
-            //debugger
         } 
         
 
@@ -283,7 +307,7 @@ export default class CanvasMainContent {
         }
     }
 
-    animateTilesBackgroundOut() {
+    animateTilesBackgroundOut(  ) {
 
     }
 
@@ -303,6 +327,7 @@ export default class CanvasMainContent {
         this.backgroundTile.resize();
         if ( this.backgroundTile.expandStatus === 'onPlace' ) {
             this.currentState = 'expandEnd';
+            this.extractBackgroundContentTile();
             //debugger;
         }
     }
@@ -339,6 +364,8 @@ export default class CanvasMainContent {
                 break;
             default:
                 this.clearCanvas();
+                this.replaceBackgroundTile();
+                this.drawBackgroundExtractedTile();
                 this.drawBackgroundTiles();
                 break;
         }
