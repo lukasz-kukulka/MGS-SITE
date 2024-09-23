@@ -69,7 +69,6 @@ const BackgroundLights = () => {
         }
 
         updateOn( cellPosX ) {
-            //console.log( cellPosX, "           ", this.posX );
             if ( cellPosX >= this.posX ) {
                 this.textStatus = "in";
             }
@@ -80,7 +79,6 @@ const BackgroundLights = () => {
             if( this.transparentText >= 1.0 ) {
                 this.textStatus = "out";
             }
-            //console.log( this.transparentText );
         }
 
         updateOut() {
@@ -137,23 +135,14 @@ const BackgroundLights = () => {
                     this.textArray[ i ].updateOn( cellPosX );
                     this.currentIndex > this.lastIndex ? this.currentIndex++ : this.currentIndex;
                 }
-
-                // if( cellPosX > this.textArray[ 1 ].posX ) {
-                //     debugger;
-                // }
                 if( this.textArray[ i ].getStatus() === 'in' ) {
                     this.textArray[ i ].updateIn();
                     
-                } else {
-                    //console.log( 'ERROR ... CellText.updateIn() status: ', this.textArray[ i ].getStatus());
                 }
             }
             if ( this.textArray[ this.lastIndex ].getStatus() === 'out' ) {
                 this.currentIndex = 0;
                 this.animationStatus = "out";
-                // if( cellPosX > this.textArray[ 1 ].posX ) {
-                //     debugger;
-                // }
             }
             
         }
@@ -167,8 +156,6 @@ const BackgroundLights = () => {
                     } else if ( char.getStatus() === 'done' ) {
                         this.currentIndex = 0;
                         this.animationStatus = "done";
-                    } else {
-                        //console.log( 'ERROR ... CellText.updateOut()', char.getStatus() );
                     }
                 } );
             }
@@ -182,7 +169,6 @@ const BackgroundLights = () => {
             this.x = x;
             this.y = y;
             this.textPosX = ( Math.random() * ( canvas.width - 50 ) ) - canvas.width / 10;
-            console.log( this.textPosX );
             this.dirX = dirX;
             this.dirY = dirY;
             this.size = size;
@@ -355,10 +341,7 @@ const BackgroundLights = () => {
         let directionX = (Math.random() * 5.5) + 0.25; // Losuje kierunek i prędkość w osi X
         let directionY = (Math.random() * 0.5) - 0.25; // Losuje kierunek i prędkość w osi Y
         let color = getRandomColor();
-        // getRandomColor();
         particlesArray.push(new Cell(x, y, directionX, directionY, size, color, getRandomText() )); // Dodaje nową cząsteczkę do tablicy
-        console.log( "init() w background light ilosc elementow czasteczki w tle", particlesArray.length, particlesArray );
-    //   }
     }
 
     function animate( currentTime ) {
@@ -371,8 +354,6 @@ const BackgroundLights = () => {
                 if( cell.getStatus() === "allDone" ) {
                     particlesArray.shift();
                     init();
-                    console.log( innerHeight, innerWidth, "-------------------------------------------------------------------------------", particlesArray )
-                    
                 }
             } );
         }
@@ -384,16 +365,6 @@ const BackgroundLights = () => {
 
     init(); 
     animate(); 
-
-    // function resetCanvas() {
-    //     canvas.width = window.innerWidth;
-    //     canvas.height = window.innerHeight;
-    //     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //     particlesArray = [];
-    //     init();
-    //     animate(0);
-    //   }
-    //   resetCanvas();
 
     window.addEventListener('resize', function () {
       canvas.width = innerWidth; 

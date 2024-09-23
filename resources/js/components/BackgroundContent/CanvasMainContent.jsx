@@ -8,6 +8,43 @@ export default class CanvasMainContent {
     setDefault( context, canvas ) {
         this.canvas = canvas;
         this.context = context;
+        this.setDefaultSettings();
+
+        this.currentPage = "home"; //home, about, offer, partners, contact
+        this.nextPage = "home"; //home, about, offer, partners, contact
+        this.contentSpeedOut = 0;
+        
+        this.homeButton = document.querySelector( '#home-button' );
+        this.homeButton.style.position = 'fixed';
+        this.homeButton.addEventListener('click', () => {
+            this.newContentIn('offer-nav');
+        });
+        this.drawHomePage();
+        this.backgroundTileExtracted = null;
+
+        this.speedIn = 50;
+        this.speedOut = 25;
+        this.resizeSpeed = 20;
+        this.speedBackgroundPos = 30;
+        this.opacitySpeed = 0.001;
+    }
+
+    setFooter() {
+        this.footer = document.querySelector( '#myFooter' );
+        this.footerPosY = this.canvas.height;
+        this.footerPosX = this.canvas.width / 2 - this.footer.getBoundingClientRect().width / 2;
+        this.footerSize = this.footer.getBoundingClientRect().height;
+        this.footer.style.position = 'absolute';
+        this.footer.style.left = this.footerPosX + 'px';
+        this.footer.style.top = this.footerPosY  + 'px';
+        this.footer.style.border = '1px solid red';
+        this.canvas.height += this.footerSize;
+    }
+
+    setDefaultSettings() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+        this.setFooter();
         this.squareArray = [];
         this.laneSpeedArray = [];
 
@@ -15,7 +52,7 @@ export default class CanvasMainContent {
         this.startDrawY = 200;
 
         this.contentX = ( this.canvas.width / 3 * 2 ) - ( this.canvas.width / 2 );
-        this.contentY = this.canvas.height / 7;
+        this.contentY = document.getElementById( 'full_nav_menu' ).offsetHeight + 20;
         this.contentWidth = this.canvas.width / 3 * 2;
         this.contentHeight = this.canvas.height / 5 * 4;
 
@@ -28,24 +65,13 @@ export default class CanvasMainContent {
         this.backgroundTilesStartX = null;
         this.backgroundTilesStartY = null;
 
+        this.currentState = "static"; // static, out, in, shine, expandBegin, expandBackground, expandEnd, contentEntry, staticContent
+        this.contentTilesArray = [];
+  
         this.contentObjectsArray = []; 
         this.createSquares();
         this.createLaneSpeedArray();
-        
-        this.currentPage = "home"; //home, about, offer, partners, contact
-        this.nextPage = "home"; //home, about, offer, partners, contact
-        this.contentSpeedOut = 0;
 
-        console.log( context.font );
-        
-        this.homeButton = document.querySelector( '#home-button' );
-        this.homeButton.style.position = 'fixed';
-        this.homeButton.addEventListener('click', () => {
-            this.newContentIn('offer-nav');
-        });
-        this.drawHomePage();
-        this.currentState = "static"; // static, out, in, shine, expandBegin, expandBackground, expandEnd
-        this.contentTilesArray = [];
         this.tileDimSmall = this.canvas.width < this.canvas.height ? this.canvas.width : this.canvas.height;
         this.tileDimHigh = this.canvas.width > this.canvas.height ? this.canvas.width : this.canvas.height;
         
@@ -56,11 +82,11 @@ export default class CanvasMainContent {
         }
 
         this.spaceBetweenTiles = this.tileSize / 8;
-        //debugger
-    } 
+    }
+
+
     
     setShineAnimationParam() {
-        //debugger;
         this.prevTileNumber = null;
         this.tilesShineArrayIndex = [];
         this.shineTilesNumber = 10;
@@ -72,11 +98,9 @@ export default class CanvasMainContent {
                 i--;
                 continue;
             }
-            //console.log( tilesShineArrayIndex );
             this.tilesShineArrayIndex.push( random );
         }
         this.backgroundTile = this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ];
-        this.backgroundTileExtracted = null;
     }
 
     extractBackgroundContentTile() {
@@ -85,13 +109,15 @@ export default class CanvasMainContent {
             this.canvas, 
             this.backgroundTile.x, 
             this.backgroundTile.y, 
-            this.tileSize * this.rowNum + this.spaceBetweenTiles * ( this.rowNum - 1 ), 
-            this.tileSize * this.colNum + this.spaceBetweenTiles * ( this.colNum - 1 ), 
+            this.backgroundTile.width, 
+            this.backgroundTile.height, 
             this.backgroundTile.borderRadius, 
             this.backgroundTile.animationBorderEnd, 
             this.backgroundTile.animationBorderStart, 
             this.backgroundTile.blur
         );
+        this.backgroundTileExtracted.copyTextArray( [...this.backgroundTile.getTextArray() ] );
+        this.backgroundTileExtracted.setTextOpacity( 0.0 );
     }
 
     generateMultiContentTiles() {
@@ -103,8 +129,6 @@ export default class CanvasMainContent {
         let rightTilePos = midTilePos + tileSize + spaceBetweenTiles;
         let posY = this.contentY;
         this.backgroundTilesStartY = posY;
-        //constructor( context, canvas, x, y, width, height, radius, animationBorderEnd = 0, animationBorderStart = 0, blur = 0 )
-        //debugger;
         let blur = 3;
         let colNum = 0;
         while( posY + spaceBetweenTiles + tileSize < this.canvas.height ) {
@@ -127,8 +151,6 @@ export default class CanvasMainContent {
         }
         this.rowNum = this.contentTilesArray.length / colNum;
         this.colNum = colNum;
-        //this.tileHelper = this.contentTilesArray.push( new CanvasTileContent( this.context, this.canvas, this.startDrawX, this.startDrawY, this.canvas.width, this.canvas.height, 0 ) );
-        //tile.colorUpdate( "rgba( 0, 0, 111, 0.5 )", "rgba( 255, 255, 255, 0.5 )" );
     }
 
     newContentIn( contentId ) {
@@ -139,17 +161,16 @@ export default class CanvasMainContent {
         this.currentState = "out";
         this.nextPage = contentId.replace( "-nav", "" );
         this.contentSpeedOut = 50;
-        //console.log( "CanvasMainContent->newContentIn : ", contentId, "next page: ", this.nextPage, "tiles: ", this.contentTilesArray );
+        if( this.backgroundTileExtracted !== null ) {
+            this.backgroundTileExtracted.setMoveOutSettings( this.backgroundTileExtracted.x + this.canvas.width );
+        }
     }
 
     createAllTilesContent() {
         this.contentObjectsArray.push( this.createSingleTileContent(  'test-content', '/images/about_us.webp' ) );
-        // this.contentObjectsArray.push( this.createSingleTileContent(  'test-content', '/images/our_offer_3.webp' ) );
-        // this.contentObjectsArray.push( this.createSingleTileContent(  'test-content', '/images/our_partners.webp' ) );
     }
 
     createSingleTileContent( textSelectorId, imagePath, posX = this.contentX, posY = this.contentY ) {
-        //console.log( this.context, this.canvas, posX, posY, this.contentWidth, this.contentHeight, this.borderRadius );
         const tile = new CanvasTileContent( this.context, this.canvas, posX, posY, this.contentWidth, this.contentHeight, this.borderRadius );
         tile.colorUpdate( "rgba( 0, 0, 111, 0.5 )", "rgba( 255, 255, 255, 0.5 )" );
         const element = document.querySelector( '#' + textSelectorId );
@@ -172,7 +193,6 @@ export default class CanvasMainContent {
             } 
             this.laneSpeedArray.push( speed );
         }
-        console.log( this.laneSpeedArray )
     }
 
     createSquares() {
@@ -182,7 +202,6 @@ export default class CanvasMainContent {
                 const posX = this.startDrawX + ( this.squareSizeX * lineArray.length ) + ( this.squareSpaceX * lineArray.length ); 
                 const posY = this.startDrawY + ( this.squareSizeY * this.squareArray.length ) + ( this.squareSpaceY * this.squareArray.length ); 
                 lineArray.push( new CanvasTileContent( this.context, this.canvas, posX, posY, this.squareSizeX, this.squareSizeY, this.borderRadius, this.borderAnimationX + ( this.squareSizeX ), this.startDrawX ) );
-                console.log( lineArray.length * this.squareSizeX );
             }
             this.squareArray.push( lineArray );
         }
@@ -193,33 +212,122 @@ export default class CanvasMainContent {
         switch ( this.currentPage ) {
             case "home":
                 this.drawHomePage();
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ HOME" );
                 break;
             case "about":
-                
+                if ( this.currentState === 'contentEntry' ) {
+                    
+                }
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ ABOUT" );
                 break;
             case "offer":
-                
+                if ( this.currentState === 'contentEntry' ) {
+
+                }
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ OFFER" );
                 break;
             case "partners":
-                
+                if ( this.currentState === 'contentEntry' ) {
+
+                }
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ PARTNERS" );
                 break;
             case "contact":
-                
+                if ( this.currentState === 'contentEntry' ) {
+
+                }
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ CONTACT" );
                 break;
         
             default:
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ DEFAULT <- ERRRRRRRRORRRRRRR" );
                 break;
         }
         
     }
 
+    setCurrentPage() {
+        switch ( this.currentPage ) {
+            case "home":
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ HOME" );
+                break;
+            case "about":
+                this.setAboutPage();
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ ABOUT" );
+                break;
+            case "offer":
+                this.setOfferPage();
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ OFFER" );
+                break;
+            case "partners":
+                this.setPartnersPage();
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ PARTNERS" );
+                break;
+            case "contact":
+                this.setContactPage();
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ CONTACT" );
+                break;
+            default:
+                console.log( "drawCurrentPage() in CanvasMAinContent ------------ DEFAULT <- ERRRRRRRRORRRRRRR" );
+                break;
+        }
+    }
+
+    setPage( contentName, imagePath = null ) {
+        const element = document.querySelector( '#' + contentName );
+        let content = element.innerHTML;
+        element.style.position = 'absolute';
+        element.style.bottom = '9999px';
+        if( imagePath !== null ) {
+            this.backgroundTile.addImage( imagePath );
+        }
+        
+        this.backgroundTile.setTextArray( content );
+        
+    }
+
+    setPageHTML( contentName ) {
+        this.contentElementHTML = document.querySelector( '#' + contentName );
+
+        this.contentElementHTML.style.position = 'absolute';
+
+        this.contentElementHTML.style.top = this.backgroundTile.startY + 'px';
+        this.contentElementHTML.style.left = this.backgroundTile.startX + 'px';
+        this.contentElementHTML.style.width = this.tileSize * this.rowNum + this.spaceBetweenTiles * ( this.rowNum - 1 ) + 'px'; 
+        this.contentElementHTML.style.height = 'auto'; 
+        this.contentElementHTML.style.opacity = 0.00;
+
+    }
+
+    setContentVisible() {
+        let currentOpacity = parseFloat(this.contentElementHTML.style.opacity);
+        if ( currentOpacity < 1.00 ) {
+            currentOpacity += 0.01;
+            this.contentElementHTML.style.opacity = currentOpacity.toString();
+        }
+        console.log( this.contentElementHTML.style.opacity );
+        
+    }
+
+    updateContentPosition() {
+        if( this.backgroundTileExtracted !== null && this.backgroundTileExtracted.x != this.contentElementHTML.style.left ) {
+            this.contentElementHTML.style.left = this.backgroundTileExtracted.x + 'px';
+        }
+        
+    }
+
+    setVirtualTextScreen() {
+        this.backgroundTileExtracted.setVirtualTextScreen();
+    }
+
     ///////////////////////////////////////////////////// HOME PAGE
     setHomePage() { 
         document.fonts.load('70px Roboto Mono').then( function () {
-            //console.log( "setHomePage()" );
+            this.fontSize = this.canvas.width / 25 ;
+            this.fontName = 'Roboto Mono'; 
             this.context.save();
             this.context.fillStyle = "rgba(255, 255, 255, 1.0)";
-            this.context.font = "70px Roboto Mono";
+            this.context.font = `${ this.fontSize }px ${ this.fontName }`;
             this.context.shadowColor = "rgba(255, 255, 255, 1.0)";
             this.context.shadowBlur = 20;
             this.context.shadowOffsetX = 0;
@@ -244,10 +352,31 @@ export default class CanvasMainContent {
     drawHomePage() {
         this.clearCanvas();
         this.setHomePage();
-        //this.homeButton.style.left = this.canvas.width / 2 - this.homeButton.offsetWidth / 2 + this.homePagePosX + 'px';
-        // this.contentObjectsArray.forEach( ( tile ) => { 
-        //     tile.draw();
-        // } );
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////// ABOUT
+    setAboutPage() {
+        this.setPageHTML( 'html-content' );
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////// OFFER
+    setOfferPage() {
+        this.setPageHTML( 'offer-content' );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////// PARTNERS
+    setPartnersPage() {
+        this.setPageHTML( 'partners-content' );
+    }
+    ////////////////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////// CONTACT
+    setContactPage() {
+        this.setPageHTML( 'contact-content' );
     }
     ////////////////////////////////////////////////////////////////////////////////////
 
@@ -256,22 +385,33 @@ export default class CanvasMainContent {
     }
 
     drawBackgroundTiles() {
-        //console.log( 'drawBackgroundTiles()' , this.contentTilesArray );
         this.contentTilesArray.forEach( ( tile ) => {
             tile.draw();
-            //debugger
-            if( this.currentState === "in" && tile.moveIn( 50 ) === false ) {
+            if( this.currentState === "in" && tile.move( this.speedIn ) === false ) {
                 this.currentState = "shine";
-                //debugger
                 this.setShineAnimationParam();
             }
+            if( this.currentState === "expandEnd" && tile.move( this.speedOut ) === false ) {
+                this.currentState = "contentEntry";
+                //this.setContentEntryParam();
+            }
+            if( this.currentState === "contentEntry" ) {
+                if( this.backgroundTileExtracted.opacity < 1.0 ) {
+                    this.backgroundTileExtracted.setOpacity( this.opacitySpeed );
+                } else {
+                    this.currentState = "staticContent";
+                }
+            }
         } );
-
-        
     }
 
     drawBackgroundExtractedTile() {
+        if( this.backgroundTileExtracted === null ) {
+            return;
+        }
+        
         this.backgroundTileExtracted.draw();
+        this.backgroundTileExtracted.drawVirtualTextScreen();
     }
 
     replaceBackgroundTile() {
@@ -291,44 +431,62 @@ export default class CanvasMainContent {
             isLastTile = true;
         } 
         
-
-        //debugger;
         this.contentTilesArray[ this.tilesShineArrayIndex[ this.shineTilesIndex ] ].shine( isLastTile );
         if ( this.tilesShineArrayIndex.length >= this.shineTilesIndex &&
             this.contentTilesArray[ this.tilesShineArrayIndex[ this.shineTilesIndex ] ].shineStatus === 'done' ) {
             this.shineTilesIndex++
-            //debugger;
             
         } 
         if ( this.tilesShineArrayIndex.length < this.shineTilesIndex + 1 ) { 
-            //debugger
             this.currentState = "expandBegin";
-            this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ].setMovePosition( this.backgroundTilesStartX, this.backgroundTilesStartY );
+            this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ].setMovePosition( this.backgroundTilesStartX, this.backgroundTilesStartY, this.speedBackgroundPos );
         }
     }
 
-    animateTilesBackgroundOut(  ) {
+    animateTilesBackgroundOut() {
 
     }
 
     animateExpandBegin() {
-        // const animateTile = this.contentTilesArray[ this.tilesShineArrayIndex[ this.tilesShineArrayIndex.length - 1 ] ];
         this.backgroundTile.expand();
+        
         if ( this.backgroundTile.expandStatus === 'onPlace' ) {
             this.currentState = 'expandBackground';
+            this.backgroundTile.setBorders( this.backgroundTile.x + this.backgroundTile.borderRadius, 
+                                            this.backgroundTile.x + this.tileSize * this.rowNum + this.spaceBetweenTiles * ( this.rowNum - 1 ) - ( this.backgroundTile.borderRadius * 2 ), 
+                                            this.backgroundTile.y + this.backgroundTile.borderRadius, 
+                                            null );
+            this.setCurrentPage();
+            
+            //const tilesContentBorderBottomY = this.contentElementHTML.getBoundingClientRect().height;
+            const tilesContentBorderBottomY = this.colNum * this.tileSize + ( this.colNum - 1 ) * this.spaceBetweenTiles;
+            // const height = this.backgroundTile.heightWithTextAndImageArray > tilesContentBorderBottomY ?
+            //     this.backgroundTile.heightWithTextAndImageArray :
+            //     tilesContentBorderBottomY;
+            const height = this.contentElementHTML.getBoundingClientRect().height > tilesContentBorderBottomY ?
+            this.contentElementHTML.getBoundingClientRect().height :
+                tilesContentBorderBottomY;
+                const text = this.contentElementHTML.getBoundingClientRect(); 
             this.backgroundTile.setResize( this.tileSize * this.rowNum + this.spaceBetweenTiles * ( this.rowNum - 1 ), 
-                                           this.tileSize * this.colNum + this.spaceBetweenTiles * ( this.colNum - 1 ) );
-            //debugger
+                                           height,
+                                           this.resizeSpeed );
+            
+            this.backgroundTile.heightWithTextAndImageArray;
+            this.backgroundTile.canvasHeightWithTextAndImageArray;
+                           
         }
     }
 
     animateBackgroundExpand() {
-        //debugger;
         this.backgroundTile.resize();
         if ( this.backgroundTile.expandStatus === 'onPlace' ) {
             this.currentState = 'expandEnd';
+            this.setFooter();
             this.extractBackgroundContentTile();
-            //debugger;
+            
+            this.contentTilesArray.forEach( ( tile ) => {
+                tile.setMoveOutSettings( tile.x + this.canvas.width );
+            } );
         }
     }
 
@@ -339,9 +497,11 @@ export default class CanvasMainContent {
     draw() {
         switch ( this.currentState ) {
             case 'out':
-                this.update();
                 this.clearCanvas();
+                this.update();
+                this.updateContentPosition();
                 this.drawCurrentPage();
+                this.drawBackgroundExtractedTile();
                 break;
             case 'in':
                 this.clearCanvas();
@@ -359,57 +519,51 @@ export default class CanvasMainContent {
                 break;
             case 'expandBackground':
                 this.clearCanvas();
-                this.drawBackgroundTiles();
                 this.animateBackgroundExpand();
+                this.drawBackgroundTiles();
                 break;
-            default:
+            case 'expandEnd':
                 this.clearCanvas();
                 this.replaceBackgroundTile();
+                this.setVirtualTextScreen();
                 this.drawBackgroundExtractedTile();
                 this.drawBackgroundTiles();
                 break;
+            case 'contentEntry':
+                this.clearCanvas();
+                this.setContentVisible();
+                //this.drawCurrentPage();
+                this.drawBackgroundExtractedTile();
+                this.drawBackgroundTiles();
+                break;
+            case 'staticContent':
+                this.clearCanvas();
+                //this.drawCurrentPage();
+                this.drawBackgroundExtractedTile();
+                break;
+            default:
+                this.clearCanvas();
+                this.drawBackgroundExtractedTile();
+                break;
         }
-        //this.drawCurrentPage();
-
-        // this.squareArray.forEach( ( singleLane ) => {
-        //     singleLane.forEach( ( singleElement ) => {
-        //         singleElement.draw();
-        //     } );
-        // } );
-        // console.log( "Canvas width: ", this.canvas.width );
-        // this.context.font = '20px Roboto Mono';
-        // this.context.fillStyle = 'white';
-        // this.context.fillText(this.content, this.startDrawX, this.canvas.height / 7 + 20);
-        
-        // this.square.draw();   
-        // this.setHomePage();
-        // // const currentLeft = window.getComputedStyle( this.homeButton ).left; 
-        // this.homeButton.style.left = this.canvas.width / 2 - this.homeButton.offsetWidth / 2 + this.homePagePosX + 'px';
-        // this.contentObjectsArray.forEach( ( tile ) => { 
-        //     tile.draw();
-        // } );
     }
 
     update() {
-        //console.log( 'update()', this.contentSpeedOut );
-        
         if ( this.currentState === "out" && this.contentSpeedOut < this.canvas.width ) {
             this.contentSpeedOut *= 1.1;
         } else if ( this.currentState === "out" && this.contentSpeedOut >= this.canvas.width ){
-            this.currentState = "in";
-            this.contentSpeedOut = 0;
-            this.currentPage = this.nextPage;
+            //debugger
+            if( this.backgroundTileExtracted === null ) {
+                this.currentState = "in";
+                this.contentSpeedOut = 0;
+                this.currentPage = this.nextPage;
+            } else if( this.backgroundTileExtracted.move( this.speedOut ) === false ) {
+                this.currentState = "in";
+                this.contentSpeedOut = 0;
+                this.currentPage = this.nextPage;
+                //this.backgroundTileExtracted.setDefaultSettings();
+            }
         }
-        // this.squareArray.forEach( ( singleLane, index ) => {
-        //     let speed = this.laneSpeedArray[ index ];
-        //     singleLane.forEach( ( singleElement ) => {
-        //         singleElement.update( speed );
-        //     } );
-        // } );
     }
 
-    moveOut() {
-        // this.startDrawX += 1.0;
-        // this.square.moveOut();
-    }
 }

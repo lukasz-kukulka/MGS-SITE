@@ -14,18 +14,24 @@ export class CanvasTileContent {
         this.img = null;
         this.setFont();
 
-        this.textBorderTop = this.y + this.borderRadius;
-        this.textBorderLeft = this.x + this.borderRadius;
-        this.textBorderRight = this.x + this.width - this.borderRadius;
-        this.textBorderBottom = this.y + this.height - this.borderRadius;
+        this.setBorders();
         this.textSpacing = 5;
         this.textLaneTable = [];
         this.colorUpdate();
         this.imageData = null;
+        this.opacity = 1.0;
+        this.virtualTextImage = null;
+        this.heightWithTextAndImageArray = this.height;
+        this.canvasHeightWithTextAndImageArray = this.canvas.height;
+        this.virtualTextImageX = 0;
+    }
+
+    setTextOpacity( opacity ) {
+        this.opacity = opacity;
     }
 
     setFont() {
-        this.fontSize = 25;
+        this.fontSize = this.canvas.width / 80;
         this.fontName = 'Roboto Mono'; // if you change font type change compute const pictureOneUnitSpace in setTextArray() method
         this.ctx.font = `${ this.fontSize }px ${ this.fontName }`;
     }
@@ -46,24 +52,22 @@ export class CanvasTileContent {
         this.shineStatus = 'in' // out, done
     }
 
-    setMovePosition( limitX, limitY ) {
+    setMovePosition( limitX, limitY, speed ) {
         this.expandStatus = "begin"; // onPlace, 
         this.startX = limitX;
         this.startY = limitY;
         this.expandSpeed = 30;
-        this.moveToCornerSpeedX = ( this.x - limitX ) / this.expandSpeed;
-        this.moveToCornerSpeedY = ( this.y - limitY ) / this.expandSpeed;
+        this.moveToCornerSpeedX = ( this.x - limitX ) / speed;
+        this.moveToCornerSpeedY = ( this.y - limitY ) / speed;
 
     }
 
-    setResize( x, y ) {
-        const resizeSpeed = 10;
+    setResize( x, y, speed ) {
         this.expandStatus = "begin"; // onPlace, 
         this.expandSizeX = x;
         this.expandSizeY = y;
-        this.resizeSpeedX = ( this.width - this.expandSizeX ) / resizeSpeed;
-        this.resizeSpeedY = ( this.height - this.expandSizeY ) / resizeSpeed;
-        //debugger
+        this.resizeSpeedX = ( this.width - this.expandSizeX ) / speed;
+        this.resizeSpeedY = ( this.height - this.expandSizeY ) / speed;
     }
 
     // SZABLON DO POZYCJI OBRAZOW PRZY GENEROWANIOU TEXTU 
@@ -94,12 +98,38 @@ export class CanvasTileContent {
     //     }
     // ];
 
+    setBorders( left = this.x + this.borderRadius, 
+                right = this.x + this.width - this.borderRadius,
+                top = this.y + this.borderRadius,
+                bottom = this.y + this.height - this.borderRadius ) {
+                    if( left !== null ) {
+                        this.textBorderLeft = left;
+                    }
+
+                    if( right !== null ) {
+                        this.textBorderRight = right;
+                    }
+
+                    if( top !== null ) {
+                        this.textBorderTop = top;
+                    }
+
+                    if( bottom !== null ) {
+                        this.textBorderBottom = bottom;
+                    }
+    }
+
+    getTextArray() {
+        return this.textLaneTable;
+    }
+
+    copyTextArray( array ) {
+        this.textLaneTable = array;
+    }
 
     setTextArray( text, scale = 1.0 ) {
         this.ctx.font = `${ this.fontSize * scale }px ${ this.fontName }`;
         const wordsArray = text.split(/\s+/);
-        console.log( "setTetxtArray : ", "|", this.imageData, "|", wordsArray.length );
-        
         let index = 0;
         let pictureFullSizeX = 0;
         if ( this.imageData !== null ) {
@@ -108,14 +138,11 @@ export class CanvasTileContent {
 
         const pictureOneUnitSpace = ( ( this.fontSize * scale ) / 5 ) * 3
         while( index < wordsArray.length ) {
-            console.log( "test in setTextArray( text ) ");
             let oneLaneText = "";
             let oneLaneTextSize = this.ctx.measureText( oneLaneText ).width;
             let nextWord = wordsArray[ index ]; 
-            //let nextWordSize = this.ctx.measureText( wordsArray[ index ] ).width;
             let nextWordSize = this.ctx.measureText( wordsArray[ index ] ).width;
             let textPosY = this.textBorderTop + ( ( this.textSpacing * scale ) * this.textLaneTable.length + ( this.fontSize * scale ) * ( this.textLaneTable.length + 1 ) );
-            //const pictureOneUnitSpace = ( this.fontSize / 5 ) * 3;
             if ( this.imageData !== null ) {
                 if ( textPosY - ( this.fontSize * scale ) > this.imageData[ 0 ].position.bl[ 1 ] ) {
                     pictureFullSizeX = 0;
@@ -126,36 +153,35 @@ export class CanvasTileContent {
                 }
                 oneLaneTextSize += pictureFullSizeX;
             }
-            
-            // console.log( 'oneLaneTextSize += pictureFullSizeX       ', oneLaneTextSize, pictureFullSizeX )
-            // debugger;
-            // const isSpaceInLane = ( oneLaneTextSize + nextWordSize < this.textBorderRight ) && ( index <= wordsArray.length );
-            //debugger
+
             while( ( oneLaneTextSize + nextWordSize < this.textBorderRight - this.textBorderLeft ) && ( index <= wordsArray.length ) ) {
                 oneLaneText += nextWord;
                 oneLaneTextSize = oneLaneText.length * pictureOneUnitSpace;
                 nextWord = " " + wordsArray[ ++index ]; 
                 nextWordSize = nextWord.length * pictureOneUnitSpace;
             }
-             //debugger;
+
             
             if ( textPosY > this.textBorderBottom ) {
-                this.height += this.textSpacing + this.fontSize * scale;
-                this.canvas.height += this.textSpacing + this.fontSize;
+                this.heightWithTextAndImageArray += this.textSpacing + this.fontSize * scale;
+                this.canvasHeightWithTextAndImageArray += this.textSpacing + this.fontSize;
                 this.ctx.font = `${ this.fontSize * scale }px ${ this.fontName }`;
+                this.textBorderBottom = textPosY;
             }
-            //debugger;
+
             this.textLaneTable.push( [ this.textBorderLeft, textPosY, oneLaneText ] );
             oneLaneText = "";
         }
-        //console.log( this.textLaneTable );
+        this.heightWithTextAndImageArray = this.textBorderBottom - this.textBorderTop + 2 * this.fontSize * scale + 2 * this.textSpacing;
+    }
+
+    setMoveOutSettings( endPos ) {
+        this.endPos = endPos;
     }
 
     addImage( path = null, posX = 0, posY = 0, alignmentVertical = "top", alignmentHorizontal = "left" ) {
-        console.log( "addImage : ", this.imageData );
         this.img = new Image();
         this.img.src = path;
-        console.log( this.ctx, this.canvas );
         this.imageSize = ( this.textBorderRight - this.textBorderLeft ) * 0.5 < 300 ? ( this.textBorderRight - this.textBorderLeft ) : ( this.textBorderRight - this.textBorderLeft ) * 0.3;
         this.setImagesData( this.imageSize, alignmentVertical, alignmentHorizontal );
         
@@ -165,7 +191,6 @@ export class CanvasTileContent {
         
         const baseX = this.setBaseX( imageSize, alignmentHorizontal );
         const baseY = this.setBaseY( imageSize, alignmentVertical );
-        console.log( "baseX", baseX );
         this.imageData = [
             {
                 "alignment": {
@@ -180,7 +205,6 @@ export class CanvasTileContent {
                 }
             }
         ];
-        console.log( "setImagesData : ", this.imageData );
     }
 
     setBaseX( imageSize, alignmentHorizontal = "left" ) {
@@ -199,24 +223,49 @@ export class CanvasTileContent {
         if( alignmentVertical === "top" ) {
             return this.textBorderTop;
         } 
-        // else if ( alignmentVertical === "center" ) {
-        //     return this.textBorderLeft + ( ( this.width / 2 ) - ( imageSize / 2 ) );
-        // } else if ( alignmentVertical === "bottom" ) {
-        //     return this.textBorderRight - imageSize;
-        // }
         console.log("...something was wrong in CanvasTileContent.setBaseY not ready for center nad bottom");
         return 0;
     }
 
+    setVirtualTextScreen() {
+        this.virtualTextImage = document.createElement('canvas');
+        this.virtualTextImage.width = this.canvas.width;
+        this.virtualTextImage.height = this.canvas.height;
+        const virtualContext = this.virtualTextImage.getContext('2d');
+
+        this.ctx.save();
+        virtualContext.font = `${ this.fontSize }px ${ this.fontName }`;
+        virtualContext.fillStyle = `white`;
+        virtualContext.beginPath();
+
+        this.textLaneTable.forEach( ( oneLane ) => {
+            virtualContext.fillText( oneLane[ 2 ], oneLane[ 0 ], oneLane[ 1 ] );
+        } );
+        //console.log( "setVirtualTextScreen inf tileContent: ", this.textLaneTable );
+        virtualContext.fill();
+        virtualContext.restore();
+    }
+
+    drawVirtualTextScreen() {
+        //console.log( "drawVirtualTextScreen inf tileContent: ", this.textLaneTable );
+        if( this.opacity !== 1.0 ) {
+            this.ctx.globalAlpha = this.opacity;
+            this.ctx.drawImage( this.virtualTextImage, this.virtualTextImageX, 0 );
+            this.ctx.globalAlpha = 1.0;
+        } else {
+            this.ctx.drawImage( this.virtualTextImage, this.virtualTextImageX, 0 );
+        }
+    }
+
     drawText() {
         this.ctx.save();
-        this.ctx.fillStyle = 'white';
+        this.ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+
         this.ctx.beginPath();
         this.ctx.filter = `blur(${this.blur}px)`
         this.textLaneTable.forEach( ( oneLane ) => {
             this.ctx.fillText( oneLane[ 2 ], oneLane[ 0 ], oneLane[ 1 ] );
         } );
-        //debugger
         this.ctx.fill();
         this.ctx.restore();
     }
@@ -251,7 +300,6 @@ export class CanvasTileContent {
 
     draw() {
         this.drawSquare();
-        this.drawText();
         this.ctx.save();
         this.drawRoundedSquare( this.textBorderLeft, this.textBorderTop, this.imageSize, this.imageSize, this.borderRadius );
         this.ctx.clip();
@@ -261,19 +309,12 @@ export class CanvasTileContent {
         this.ctx.restore();
     }
 
-    update( speed ) {
-        //console.log( this.x, this.animationBorderStart, this.animationBorderEnd );
-        // if( this.x > this.animationBorderEnd ) {
-        //     console.log( this.x, this.animationBorderEnd );
-        //     this.x = this.animationBorderStart;
-        // } else { 
-        //     this.x += speed * 0.3;
-        // }
-    }
-
-    moveIn( speed ) {
+    move( speed ) {
         if ( this.endPos > this.x ) {
             this.x += speed;
+            if ( this.virtualTextImage !== null ) {
+                this.virtualTextImageX += speed;
+            }
             if( this.endPos < this.x ) {
                 this.x = this.endPos;
             }
@@ -284,24 +325,16 @@ export class CanvasTileContent {
     }
 
     shine( isLast = false ) {
-        //console.log( this.shineSpeed, this.baseShine, this.shineValue,  this.shineStatus );
-        // this.textIndex++;
         if ( this.shineValue >= 1.00 && this.shineStatus === 'in' ) {
             this.shineSpeed = -1 * this.baseShine;
             if( isLast === false ) {
                 this.expandValue *= -1;
             }
             this.shineStatus = 'out'
-            // console.log( 'TEST --------------------------------- ', this.textIndex );
-            // this.textIndex = 0;
         } else if ( this.shineValue <= this.baseShine * 2 && this.shineStatus === 'out' ) {
             this.shineSpeed = this.baseShine;
             this.expandValue *= -1;
             this.shineStatus = 'done';
-            
-            // console.log( 'TEST2 --------------------------------- ', this.textIndex );
-            // this.textIndex = 0;
-            //console.log( this.shineSpeed, this.baseShine, this.shineValue,  this.shineStatus );
         }
         if ( this.shineStatus !== 'done' ) {
             this.shineValue += this.shineSpeed;
@@ -320,7 +353,6 @@ export class CanvasTileContent {
             this.ctx.closePath();
             this.ctx.restore();
         }
-        //console.log( this.shineValue, this.shineStatus );
     }
 
     expand() {
@@ -330,12 +362,10 @@ export class CanvasTileContent {
 
         if( this.startX >= this.x - reducer && this.startX <= this.x + reducer ) {
             this.x = this.startX;
-            //debugger
         }
 
         if( this.startY >= this.y - reducer && this.startY <= this.y + reducer ) {
             this.y = this.startY;
-            //debugger
         }
 
         if( this.startX < this.x ) {
@@ -357,32 +387,13 @@ export class CanvasTileContent {
         if( this.startX === this.x && this.startY === this.y ) {
             this.expandStatus = 'onPlace';
         }
-        // console.log( speedX, speedY )
-        //console.log( 'Y = ', this.startX, '===', this.x, this.startY, '===', this.y );
-
-        // if ( this.startX === this.x ) {
-        //     console.log( 'X = ', this.startX, '===', this.x, this.startY, '===', this.y );
-        // }
-
-        // if ( this.startY === this.y ) {
-        //     console.log( 'Y = ', this.startX, '===', this.x, this.startY, '===', this.y );
-        // }
     }
 
     resize() {
         const speedX = Math.abs( this.resizeSpeedX );
         const speedY = Math.abs( this.resizeSpeedY );
-        // const reducer = 1.0;
-
-        // if( this.startX >= this.x - reducer && this.startX <= this.x + reducer ) {
-        //     this.x = this.startX;
-        //     //debugger
-        // }
-
-        // if( this.startY >= this.y - reducer && this.startY <= this.y + reducer ) {
-        //     this.y = this.startY;
-        //     //debugger
-        // }
+        //const canvasYLimit = Math.floor(this.canvasHeightWithTextAndImageArray);
+        // const canvasYLimit = this.expandSizeY;
 
         if( this.expandSizeX > this.width ) {
             this.width += speedX;
@@ -392,10 +403,6 @@ export class CanvasTileContent {
             this.width = this.expandSizeX;
         }
 
-        // if( this.startX > this.x ) {
-        //     this.x += speedX;
-        // }
-
         if( this.expandSizeY > this.height ) {
             this.height += speedY;
         }
@@ -403,32 +410,27 @@ export class CanvasTileContent {
         if( this.expandSizeY < this.height ) {
             this.height = this.expandSizeY;
         }
-        //console.log( speedX, speedY,  )
-        // if( this.startY > this.y ) {
-        //     this.y += speedY;
+        
+        // if( canvasYLimit > this.canvas.height ) {
+        //     this.canvas.height += speedY;
+        // }
+
+        // if( canvasYLimit < this.canvas.height ) {
+        //     this.canvas.height = canvasYLimit;
         // }
 
         if( this.expandSizeX === this.width && this.expandSizeY === this.height ) {
-            //debugger
-            // this.width = this.expandSizeX;
-            // this.height = speedY;
-            // this.width = speedX;
             this.expandStatus = 'onPlace';
-            //debugger
+            this.canvas.height = this.height + this.startY;
         }
     }
 
-    moveOut() {
-        // if ( this.x <= this.canvas.width - 200 ) {
-        //     const speed = 15.0
-        //     this.x += speed;
-        //     this.textBorderLeft += speed;
-        //     this.textBorderRight += speed;
-        //     this.textLaneTable.forEach( ( lane ) => {
-        //         lane[ 0 ] += speed;
-        //     } );
-        // }
+    setOpacity( val ) {
+        if( this.opacity < 1.0 ) {
+            this.opacity += val;
+        } else {
+            this.opacity = 1.0;
+        }
         
-        //this.y += 1.0;
     }
 }

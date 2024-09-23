@@ -1,6 +1,6 @@
 <div>
     <div id="app" class="flex-grow flex flex-col">
-        <nav class="bg-blue-950 bg-opacity-35">
+        <nav id="full_nav_menu" class="bg-blue-950 bg-opacity-35">
             <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-1">
                 <a class="brand-logo" href="{{ url('/') }}"></a>
                 <div class="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
@@ -32,48 +32,179 @@
 
             <div id="background-small-tile-text" style="display: none">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, libero ipsum! Voluptas exercitationem mollitia quod officia aut culpa, eius beatae officiis corporis eum libero aperiam voluptate, id fugit maiores commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat, dicta libero temporibus autem corrupti vel. Quam, sapiente aliquam, harum, voluptate iusto alias odio minus est officiis nisi ipsam debitis itaque? Lorem, ipsum dolor. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio voluptate, veritatis quasi id molestiae eligendi culpa ex quo laudantium rem error veniam incidunt tempore ut alias nam. Odit repellendus impedit autem minima perferendis quae optio, voluptatibus nulla debitis quo mollitia quam modi culpa officiis sit maxime! Id iste eaque sint mollitia omnis, beatae reprehenderit nam.
             </div>
-            
-            <div id="test-content">Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                Omnis blanditiis nobis exercitationem itaque maxime doloribus deleniti mollitia tenetur ut voluptas minus, non voluptatem 
-                corrupti ducimus beatae eveniet sit ipsum vero, accusamus fugiat voluptatum quibusdam? Nesciunt nobis autem natus. Recusandae est sunt voluptatem, 
-                repellendus nostrum hic ad ratione saepe distinctio minus cum. Dolorem ducimus laboriosam, alias animi modi fugit et! Facilis, fugiat! 
-                Voluptatum libero odio impedit esse harum. Consequuntur cum exercitationem harum distinctio nostrum atque, nisi aut natus hic repellat 
-                ad dolor nobis maiores velit ducimus a ipsum accusamus fugiat modi facilis veniam, ab ut. Minima nihil dolorem earum, quas, optio incidunt, sit eos quidem 
-                aliquid explicabo itaque quasi. Repellendus numquam placeat asperiores. Accusamus vitae soluta laborum magni ipsam deleniti porro fugiat necessitatibus. Tempore praesentium vitae fugiat eum? Repellendus inventore excepturi nisi temporibus praesentium rem, consectetur neque, voluptas reprehenderit quia quibusdam earum dolorum adipisci unde corrupti doloribus pariatur fugit provident reiciendis odio? Quisquam, amet! Corporis aspernatur tempora ullam minus vel, quaerat, cumque fugiat odio nam quas temporibus nemo dicta! Et suscipit officia minima debitis nihil saepe? Ex, harum vitae laborum incidunt debitis ad temporibus dolor unde ipsum voluptatum recusandae! Maiores ut officiis nemo deserunt consequuntur, magni esse! Recusandae ea eligendi repudiandae. Odit ratione nobis molestiae quibusdam consectetur laudantium culpa mollitia earum esse, omnis nostrum? Commodi illum velit id accusamus alias, minus assumenda corporis est consequuntur amet temporibus sunt quas aliquam ab doloremque non vitae iste. Molestias, eum harum. Facere animi assumenda omnis. 
-                Veniam nulla voluptatibus quia distinctio nisi excepturi sed ducimus, quos beatae delectus obcaecati iure provident pariatur iste velit mollitia quo qui quam amet earum, 
-                ipsa maxime! Voluptates velit ea, deleniti saepe facilis, quae fugiat quos non eveniet, aliquid iure praesentium perspiciatis provident. 
-                Impedit mollitia nulla quibusdam fugiat, architecto nihil quos est facilis nisi sunt repudiandae natus officiis nesciunt in qui p
-                laceat inventore consequuntur modi assumenda minima. Ut ipsum odio eum, labore odit possimus facere enim recusandae corporis, est, 
-                voluptate dolores laborum dolor exercitationem. Sunt ipsa deleniti vero, vitae consequuntur esse, hic inventore similique est dolorem 
-                qui aliquid! Velit assumenda similique unde id veritatis nobis, mollitia ex? Dignissimos eaque, amet ipsum quisquam autem labore similique 
-                eos aliquam, rerum facilis sunt illo inventore possimus recusandae veritatis quae beatae nesciunt voluptas assumenda fugit facere, corrupti 
-                placeat animi nisi. Quo alias suscipit quam nisi tempore expedita ad quasi magnam non. Quo qui ullam alias hic vel debitis excepturi sint rem. 
-                Unde repellendus, magnam eaque ex ducimus cupiditate fuga quibusdam, officia repellat a laborum inventore hic. Commodi earum vel doloremque unde 
-                culpa, ipsa tenetur ipsam iusto laboriosam molestias ducimus quidem velit voluptas. Cumque error quia odit totam quod sint ex at nisi officia. 
-                Nisi tempore corporis repellat perspiciatis, nemo atque vel, fugiat quos dignissimos soluta officia consectetur exercitationem quia placeat quis excepturi cupiditate fugit voluptas aut. Dignissimos aperiam explicabo assumenda distinctio sequi alias totam animi, iste earum natus ipsum ab nemo. Blanditiis molestiae eius odit maiores sed voluptatibus, ex corrupti aliquam alias nisi vel nemo beatae earum minima aperiam at amet in voluptate. Ex soluta quaerat laborum magni quos ducimus aperiam veritatis harum illo sapiente accusamus, assumenda voluptatum porro repudiandae nobis impedit aut earum facere. Magni ipsum, assumenda quibusdam quidem nihil nobis, dicta incidunt repudiandae aspernatur sequi eius enim, praesentium aperiam eos corrupti magnam dignissimos deserunt illum accusamus debitis. Pariatur quidem ex laborum, numquam animi nemo perferendis. Doloremque aperiam ad necessitatibus, laborum veniam sunt sed numquam nostrum quisquam? Quaerat nobis odio consequatur impedit ipsam corporis, totam in optio delectus dolorem neque perspiciatis provident, corrupti non. Necessitatibus, sit repudiandae! Inventore excepturi est iste exercitationem adipisci quod, repudiandae tempore reiciendis et minus impedit ut placeat architecto a fugiat, qui, perferendis consectetur omnis itaque suscipit aperiam non molestiae nemo. Optio, in? Ratione voluptatibus neque, doloribus placeat sit quo quidem est, quibusdam dicta fuga eligendi nam, explicabo provident! Mollitia obcaecati ut vero quasi. Id molestiae, vitae eum assumenda debitis quos ratione atque quaerat dolorum animi sapiente fugiat vero porro omnis rem nam magnam commodi dolor architecto dolore alias eos quas! Enim delectus, impedit veritatis, vitae harum voluptates, minus eligendi velit saepe earum possimus dolore officiis alias eveniet aliquam pariatur maiores nobis ab reprehenderit in dolores consequatur. Laudantium expedita aliquam quae corporis aspernatur. Accusantium odio dignissimos quis blanditiis excepturi esse consequuntur. Obcaecati dolores quasi similique earum accusamus iusto veniam excepturi omnis, reprehenderit ipsum quidem et in, tenetur numquam aut inventore explicabo? Fugiat labore sint consequuntur, nihil ex commodi cum dolorum ad rem eveniet minus quam odit quaerat, laboriosam inventore reiciendis repudiandae magni mollitia eum nisi atque itaque, dolore accusamus eaque? Atque fuga autem molestias ducimus tempore corporis dolor ullam labore, quas cum mollitia quibusdam odio doloremque minus quae magni aliquid ipsum. Qui possimus officiis consequatur pariatur quam eaque aliquid officia expedita minus perferendis, quae delectus illum. Quibusdam neque maiores quis veniam natus assumenda maxime fuga optio nostrum sequi fugiat sint, alias est nobis dolores eos ut soluta autem distinctio. Fugit debitis quidem quaerat iste pariatur, earum placeat reprehenderit hic, tempora voluptate esse? Ex, ut iste. Velit placeat veritatis est. At quis pariatur odio nisi eos quasi nesciunt? Odit qui illum nisi modi, id eligendi fugiat aperiam ullam vel provident ipsa delectus, sequi ratione perferendis minus necessitatibus, tempora blanditiis optio! Officia deleniti ipsam quam veritatis alias ab ducimus, fuga magni dolorem maxime minima harum voluptatem maiores aperiam iusto sit eos consequatur asperiores voluptatum repellat temporibus! Velit, dolorum ipsam possimus rem, accusantium cum modi, suscipit ab corrupti perspiciatis odit pariatur. Aliquid asperiores, excepturi tempora exercitationem temporibus odio impedit delectus quidem labore nesciunt ipsum mollitia similique optio facilis minus! Recusandae veritatis voluptates nam mollitia commodi dignissimos, quis dolorum suscipit enim optio laborum explicabo quisquam sed quia eius voluptatum sequi magnam! Nostrum tempora beatae reiciendis voluptatum laborum debitis suscipit omnis vero perspiciatis pariatur saepe veritatis quia magnam aliquid eos, maxime, fuga laboriosam iure! Repellat tempore modi quae aliquam natus. Iusto facere dicta provident blanditiis sapiente perspiciatis sint fuga quidem minima, deleniti sequi nemo. Dolorem ipsa similique, facilis repellendus adipisci ullam vero voluptatem dolorum quam fugit unde labore officia numquam sed. Amet, veritatis.
+            <div id="partners-content" class="flex items-center justify-center h-screen mt-8">
+                <div class="flex items-center">
+                    <img src="{{ asset('images/mt.JPG') }}" alt="Image1" class="mr-8">
+                    <img src="{{ asset('images/dce.JPG') }}" alt="Image2">
+                </div>
             </div>
-
-            {{-- @yield('content') --}}
-            {{-- @livewire('content-manager') --}}
-            {{-- @livewire( 'content-manager' ) --}}
+            <div id="contact-content" class="flex justify-center">
+                <div class="w-full max-w-md"> <!-- Formularz na 1/3 szerokości okna -->
+                    <div class="bg-transparent rounded-lg shadow-md text-center">
+                        <div class="p-6">
+                            <form method="POST" action="{{ route('sendMail') }}">
+                                @csrf
+                                <!-- Pole Temat -->
+                                <div class="mb-4">
+                                    <label for="subject" class="block text-left mb-1 text-white">{{ __('base.contact_subject_label') }}<span class="text-red-500">*</span></label>
+                                    <input type="text" class="border @error('subject') border-red-500 @enderror rounded w-full p-2" id="subject" value="{{ old('subject') }}" name="subject" required>
+                                    @error('subject')
+                                        <span class="text-red-500 text-sm" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
             
-            {{-- {{ dd('test in main layouts balde') }} --}}
-            {{-- {{ dd( 'variables:', get_defined_vars() ) }}  --}}
-            {{-- <div id="content-manager-root"></div> --}}
-        </main>
+                                <!-- Pole Imię -->
+                                <div class="mb-4">
+                                    <label for="first_name" class="block text-left mb-1 text-white">{{ __('base.contact_name_label') }}<span class="text-red-500">*</span></label>
+                                    <input type="text" class="border @error('first_name') border-red-500 @enderror rounded w-full p-2" id="first_name" value="{{ old('first_name', Auth::user()->name ?? '') }}" name="first_name" required>
+                                    @error('first_name')
+                                        <span class="text-red-500 text-sm" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+            
+                                <!-- Pole Nazwisko (opcjonalne) -->
+                                <div class="mb-4">
+                                    <label for="last_name" class="block text-left mb-1 text-white">{{ __('base.contact_surname_label') }}</label>
+                                    <input type="text" class="border rounded w-full p-2" id="last_name" value="{{ old('last_name', Auth::user()->surname ?? '') }}" name="last_name">
+                                </div>
+            
+                                <!-- Pole E-mail -->
+                                <div class="mb-4">
+                                    <label for="email" class="block text-left mb-1 text-white">{{ __('base.contact_mail_label') }}<span class="text-red-500">*</span></label>
+                                    <input type="email" class="border @error('email') border-red-500 @enderror rounded w-full p-2" id="email" value="{{ old('email', Auth::user()->email ?? '') }}" name="email" required>
+                                    @error('email')
+                                        <span class="text-red-500 text-sm" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+            
+                                <!-- Pole Numer Telefonu (opcjonalne) -->
+                                <div class="mb-4">
+                                    <label for="phone" class="block text-left mb-1 text-white">{{ __('base.contact_tel_label') }}</label>
+                                    <input type="tel" class="border rounded w-full p-2" id="phone" value="{{ old('phone', Auth::user()->phone_number ?? '') }}" name="phone">
+                                </div>
+            
+                                <!-- Pole Treść Wiadomości -->
+                                <div class="mb-4">
+                                    <label for="message" class="block text-left mb-1 text-white">{{ __('base.contact_message_label') }}<span class="text-red-500">*</span></label>
+                                    <textarea class="border @error('message') border-red-500 @enderror rounded w-full p-2" id="message" name="message" rows="4" required>{{ old('message') }}</textarea>
+                                    @error('message')
+                                        <span class="text-red-500 text-sm" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+            
+                                <!-- Przycisk wysyłania z lekkim odstępem -->
+                                <button type="submit" class="bg-blue-500 text-white rounded px-4 py-2 mt-3">{{ __('base.send') }}</button>
+                                <!-- Tekst pola obowiązkowe -->
+                                <p class="text-red-500 mt-2">{{ __('base.contact_field_required_label') }}</p>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <div id="html-content" class="bg-white text-gray-800 p-6 mx-auto rounded-lg shadow-md">
+                <h1 class="text-2xl font-bold mb-4">O nas</h1>
+                <p class="mb-4">Jesteśmy dynamicznie rozwijającą się firmą IT, która z pasją tworzy nowoczesne rozwiązania technologiczne. Oferujemy kompleksowe usługi – od projektowania profesjonalnych stron internetowych i sklepów online, po tworzenie zaawansowanych systemów informatycznych.</p>
+                <p class="mb-4">Nasze rozwiązania są zawsze dopasowane do potrzeb klienta, co pozwala nam zapewnić efektywność i pełne wsparcie w każdym etapie realizacji. Wybierając nas, inwestujesz w innowacyjność, elastyczność i pełną personalizację. Pozwól nam pomóc Twojemu biznesowi rosnąć w cyfrowym świecie!</p>
+                <p class="text-lg font-semibold">Zapraszamy do współpracy firmy jak i osoby prywatne!</p>
+            </div>
+            <div id="offer-content" class="text-gray-800 p-6 mx-auto rounded-lg shadow-md">
+                <!-- Powtórz dla 10 wierszy -->
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 1</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>2zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 2</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>5zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 3</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>10zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 4</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>3zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 5</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>7zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 6</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>15zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 6</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>15zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 6</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>15zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 6</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>15zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 6</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>15zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 6</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>15zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 6</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>15zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 6</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>15zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 7</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>12zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 8</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>8zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 9</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>6zł</span>
+                </div>
+                <div class="flex justify-between items-center py-4 border-b border-gray-300">
+                  <span>Example 10</span>
+                  <span class="flex-grow mx-4 border-dotted border-t border-gray-400"></span>
+                  <span>20zł</span>
+                </div>
+              </div>
+        
     </div>
-
-    {{-- <footer class="max-w-5xl w-full mx-auto rounded-lg shadow flex h-32">
-        <div class="flex-grow w-1/3 p-4">
-            <p>dsdadasdsadadsdasdasd</p>
-        </div>
-        <div class="w-1 h-full bg-mgs-dark-blue rounded-full shadow-lg mx-4"></div>
-        <div class="flex-grow w-1/3 p-4">
-            <p>dsdadasdsadadsdasdasd</p>
-        </div>
-        <div class="w-1 h-full bg-mgs-dark-blue rounded-full shadow-lg mx-4"></div>
-        <div class="flex-grow w-1/3 p-4">
-            <p>dsdadasdsadadsdasdasd</p>
-        </div>
-    </footer> --}}
 </div>

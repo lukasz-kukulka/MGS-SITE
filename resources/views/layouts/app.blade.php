@@ -30,6 +30,8 @@
         {{-- @yield( 'footer-script' ) --}}
         @livewireScripts
     </div>
-    
+    <footer id="myFooter" class="bg-gray-800 text-white p-4 text-center">
+        &copy; 2024 MGS Solutions. Wszelkie prawa zastrzeżone.
+    </footer>
 </body>
 </html>
