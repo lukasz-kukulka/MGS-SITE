@@ -17,7 +17,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     @livewireStyles
     @viteReactRefresh
-    @vite( 'resources/css/app.css' )
+    @if (app()->environment('local'))
+        @vite('resources/css/app.css')
+    @endif
     @vite( [ 'resources/sass/app.scss', 'resources/js/app.js' ] )
     @yield( 'header-css' )
     
