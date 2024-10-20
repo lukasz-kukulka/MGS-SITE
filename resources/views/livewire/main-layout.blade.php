@@ -30,20 +30,20 @@
                 </div>
             </div>
 
+            <div id="background-small-tile-text" style="display: none"></div>
             <div id="partners-content" class="flex items-center justify-center h-screen mt-8">
-                <div class="flex items-center">
-                  <a href="https://mecztrenera.pl">
-                    <img src="{{ asset('images/mt.jpg') }}" alt="mecztrenera.pl" class="mr-8">
-                  </a>
-                  <a href="https://kurierportal.cfolks.pl">
-                    <img src="{{  asset('images/dce.jpg') }}" alt="kurierportal.cfolks.pl" class="mr-8">
-                  </a>
-                  <a href="http://apblogistics.eu">
-                    <img src="{{ asset('images/apb.png') }}" alt="http://apblogistics.eu" class="mr-8">
-                  </a>
-                </div>
-            </div>
-
+              <div class="flex items-center">
+                <a href="https://mecztrenera.pl">
+                  <img src="{{ asset('images/mt.jpg') }}" alt="mecztrenera.pl" class="mr-8">
+                </a>
+                <a href="https://kurierportal.cfolks.pl">
+                  <img src="{{  asset('images/dce.jpg') }}" alt="kurierportal.cfolks.pl" class="mr-8">
+                </a>
+                <a href="http://apblogistics.eu">
+                  <img src="{{ asset('images/apb.png') }}" alt="http://apblogistics.eu" class="mr-8">
+                </a>
+              </div>
+          </div>
             <div id="contact-content" class="flex justify-center">
                 <div class="w-full max-w-md"> <!-- Formularz na 1/3 szerokości okna -->
                     <div class="bg-transparent rounded-lg shadow-md text-center">
