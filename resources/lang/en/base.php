@@ -11,6 +11,7 @@ return [
     'home' => 'Home page',
     'welcome' => 'Home page',
     'partners' => 'Partners',
+    'check_our_offer' => 'Check our offer',
     'language_message' => 'Choose language',
     'contact_subject_label' => 'Subject',
     'contact_name_label' => 'First Name',

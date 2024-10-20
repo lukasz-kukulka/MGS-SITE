@@ -12,25 +12,25 @@
         <li id="about-nav" class="about nav-menu-link">
             {{-- {!! __NAV_BUTTON_REACT( $buttonBefore, $buttonAfter, 'about' ) !!} --}}
             <button id="about-nav-button" class="{{ $styleNavMenu }}">
-                About us
+                {{ __( 'base.about' ) }}
               </button>
         </li>
         <li id="offer-nav" class="offer nav-menu-link">
             {{-- {!! __NAV_BUTTON_REACT( $buttonBefore, $buttonAfter, 'offer' ) !!} --}}
             <button id="offer-nav-button" class="{{ $styleNavMenu }}">
-                Offer
+                {{ __( 'base.offer' ) }}
               </button>
         </li>
         <li id="partners-nav" class="partners nav-menu-link">
             {{-- {!! __NAV_BUTTON_REACT( $buttonBefore, $buttonAfter, 'partners' ) !!} --}}
             <button id="partners-nav-button" class="{{ $styleNavMenu }}">
-                Partners
+                {{ __( 'base.partners' ) }}
               </button>
         </li>
         <li id="contact-nav" class="contact nav-menu-link">
             {{-- {!! __NAV_BUTTON_REACT( $buttonBefore, $buttonAfter, 'contact' ) !!} --}}
             <button id="contact-nav-button" class="{{ $styleNavMenu }}">
-                Contact
+                {{ __( 'base.contact' ) }}
               </button>
         </li>
     </ul>

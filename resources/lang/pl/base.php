@@ -11,6 +11,7 @@ return [
     'home' => 'Strona główna',
     'welcome' => 'Strona główna',
     'partners' => 'Partnerzy',
+    'check_our_offer' => 'Sprawdź naszą ofertę',
     'language_message' => 'Wybierz język',
     'contact_subject_label' => 'Temat',
     'contact_name_label' => 'Imię',

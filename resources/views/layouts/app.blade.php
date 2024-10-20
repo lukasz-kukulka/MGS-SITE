@@ -17,11 +17,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     @livewireStyles
     @viteReactRefresh
-    {{-- @vite( 'resources/css/app.css' ) --}}
+    @vite( 'resources/css/app.css' )
     @vite( [ 'resources/sass/app.scss', 'resources/js/app.js' ] )
     @yield( 'header-css' )
+    
 </head>
 <body class="flex flex-col min-h-screen">
+    @inject('backgroundSentenceController', 'App\Http\Controllers\BackgroundSentenceController')
+
+    @php
+        $sentencesData = $backgroundSentenceController->getSentence();
+    @endphp
+    <div id="background_sentence" data-backgroundSentence='@json( $sentencesData->getData() )'></div>
     <div id="background"></div>
     
     <div id="main-content" class="flex flex-col min-h-screen">
@@ -30,6 +37,9 @@
         {{-- @yield( 'footer-script' ) --}}
         @livewireScripts
     </div>
+     
+    
+    <div id="sentences-data" data-sentences='{!! json_encode( $sentencesData ) !!}'></div>
     <footer id="myFooter" class="bg-gray-800 text-white p-4 text-center">
         &copy; 2024 MGS Solutions. Wszelkie prawa zastrzeżone.
     </footer>

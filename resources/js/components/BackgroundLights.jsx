@@ -1,9 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 
-const BackgroundLights = () => {
-    
-  const canvasRef = useRef(null);
+const dataContainer = document.getElementById( 'background_sentence' );
+const jsonData = JSON.parse( dataContainer.getAttribute( 'data-backgroundSentence' ) );
+const sentencesArray = Object.values( jsonData );
 
+const BackgroundLights = () => {
+    const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -296,14 +298,8 @@ const BackgroundLights = () => {
     }
 
     function getRandomText() {
-        let textArray = [
-            "We are professional",
-            "Fast solution",
-            "Trust our experts",
-            "Implement new technology",
-            "Get match solutions",
-            "Many happy customers",
-        ];
+        let textArray = sentencesArray;
+        // console.log( sentenceArray, textArray, sentencesArray, jsonData );
         let randomIndex;
         do {
             randomIndex = Math.floor( Math.random() * ( textArray.length - 1) );

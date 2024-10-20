@@ -1,6 +1,6 @@
-<form wire:submit="switchLang" method="POST" class="md:mt-0" style="display: flex; align-items: center; gap: 1rem;">
+<form action="{{ route('switch.lang') }}" method="POST" class="md:mt-0" style="display: flex; align-items: center; gap: 1rem;">
     @csrf
-    <select wire:model="language" name="language" id="language" class="bg-gray-200 rounded text-sm">
+    <select name="language" id="language" class="bg-gray-200 rounded text-sm">
         @foreach (config('app.languages') as $lang => $language)
             <option value="{{ $lang }}" {{ app()->getLocale() == $lang ? 'selected' : '' }}>
                 {{ $language }}

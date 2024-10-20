@@ -304,9 +304,7 @@ export default class CanvasMainContent {
         if ( currentOpacity < 1.00 ) {
             currentOpacity += 0.01;
             this.contentElementHTML.style.opacity = currentOpacity.toString();
-        }
-        console.log( this.contentElementHTML.style.opacity );
-        
+        }        
     }
 
     updateContentPosition() {
@@ -396,7 +394,9 @@ export default class CanvasMainContent {
                 //this.setContentEntryParam();
             }
             if( this.currentState === "contentEntry" ) {
-                if( this.backgroundTileExtracted.opacity < 1.0 ) {
+                //console.log( "Opacity:  ", this.backgroundTileExtracted.opacity );
+                if( this.backgroundTileExtracted.opacity < 1.0 || this.contentElementHTML.style.opacity < 1.0 ) {
+                    //console.log( this.backgroundTileExtracted.opacity );
                     this.backgroundTileExtracted.setOpacity( this.opacitySpeed );
                 } else {
                     this.currentState = "staticContent";

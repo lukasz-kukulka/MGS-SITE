@@ -426,6 +426,7 @@ export class CanvasTileContent {
     }
 
     setOpacity( val ) {
+        //CONSOLE.LOG( this.opacity, val );
         if( this.opacity < 1.0 ) {
             this.opacity += val;
         } else {

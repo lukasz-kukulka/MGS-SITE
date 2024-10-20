@@ -23,21 +23,27 @@
                 <div id="home-button-container">
                     <div id="home-button">
                         <button class="bg-transparent hover:bg-blue-500 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent py-4 px-8 rounded">
-                            Check our offer
+                          {{ __( 'base.check_our_offer' ) }}
                             </button>
                     </div>
                     
                 </div>
             </div>
 
-            <div id="background-small-tile-text" style="display: none">Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo, libero ipsum! Voluptas exercitationem mollitia quod officia aut culpa, eius beatae officiis corporis eum libero aperiam voluptate, id fugit maiores commodi. Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat, dicta libero temporibus autem corrupti vel. Quam, sapiente aliquam, harum, voluptate iusto alias odio minus est officiis nisi ipsam debitis itaque? Lorem, ipsum dolor. Lorem, ipsum dolor sit amet consectetur adipisicing elit. Distinctio voluptate, veritatis quasi id molestiae eligendi culpa ex quo laudantium rem error veniam incidunt tempore ut alias nam. Odit repellendus impedit autem minima perferendis quae optio, voluptatibus nulla debitis quo mollitia quam modi culpa officiis sit maxime! Id iste eaque sint mollitia omnis, beatae reprehenderit nam.
-            </div>
             <div id="partners-content" class="flex items-center justify-center h-screen mt-8">
                 <div class="flex items-center">
-                    <img src="{{ asset('images/mt.JPG') }}" alt="Image1" class="mr-8">
-                    <img src="{{ asset('images/dce.JPG') }}" alt="Image2">
+                  <a href="https://mecztrenera.pl">
+                    <img src="{{ asset('images/mt.jpg') }}" alt="mecztrenera.pl" class="mr-8">
+                  </a>
+                  <a href="https://kurierportal.cfolks.pl">
+                    <img src="{{  asset('images/dce.jpg') }}" alt="kurierportal.cfolks.pl" class="mr-8">
+                  </a>
+                  <a href="http://apblogistics.eu">
+                    <img src="{{ asset('images/apb.png') }}" alt="http://apblogistics.eu" class="mr-8">
+                  </a>
                 </div>
             </div>
+
             <div id="contact-content" class="flex justify-center">
                 <div class="w-full max-w-md"> <!-- Formularz na 1/3 szerokości okna -->
                     <div class="bg-transparent rounded-lg shadow-md text-center">
